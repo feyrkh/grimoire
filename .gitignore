@@ -13,6 +13,7 @@ game/[Bb]uild/
 *.userprefs
 *.pidb
 *.booproj
+.idea
 
 # Unity3D generated meta files
 *.pidb.meta
