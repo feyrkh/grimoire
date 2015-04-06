@@ -1,0 +1,230 @@
+<html><head>
+    <style>
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid black;
+            padding: 5px;
+            vertical-align: top;
+        }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.tablesorter.js"></script>
+    <script type="application/javascript">
+        console.log("Starting...");
+        var oldLog = console.log;
+        console.log = function(a1) {
+//            oldLog.call(a1);
+            $("#console").append(a1+"<br/>");
+        }
+
+        var logic;
+        var theoremApplicationSuggestion;
+        function generateTheoremApplicationSuggestion() {
+            theoremApplicationSuggestion = suggestRandomTheoremApplication(15);
+            $("#theoremApplicationAmount").val('');
+            $("#theoremApplicationAmount").focus();
+            $('#theoremApplicationExamples').html('');
+
+            if(theoremApplicationSuggestion) {
+                $("#theoremApplication").html("What would happen if you used <b>" + theoremApplicationSuggestion.theorem + "</b> to solve <b>" + theoremApplicationSuggestion.problem + "</b>?");
+                var strBuild = ["<b>Other problems this theorem affects:</b><br>"];
+                $.each(logic.problems, function(problemName, problemData) {
+                    if(problemData.solutions[theoremApplicationSuggestion.theorem]) {
+                        strBuild.push(problemName, ": ", problemData.solutions[theoremApplicationSuggestion.theorem], "<br>");
+                    }
+                });
+                strBuild.push("<br><b>Other solutions for this problem:</b><br>");
+                $.each(logic.problems[theoremApplicationSuggestion.problem].solutions, function(solutionName, solutionAmt) {
+                    strBuild.push(solutionName, ": ", solutionAmt, "<br>");
+                });
+                $("#theoremApplicationExamples").html(strBuild.join(''));
+            } else {
+                $("#theoremApplication").html("Couldn't think of any suggestions, maybe try again later.");
+            }
+        }
+
+        function applyTheoremApplicationSuggestion() {
+            if(!$('#theoremApplicationAmount').val().trim() || !(parseFloat($('#theoremApplicationAmount').val()))) {
+                return;
+            }
+            saveUndoSnapshot();
+            logic.problems[theoremApplicationSuggestion.problem].solutions[theoremApplicationSuggestion.theorem] = parseFloat($('#theoremApplicationAmount').val());
+            generateTheoremApplicationSuggestion();
+            refreshPreceptListJs();
+            refreshAllInfo();
+        }
+
+        function blacklistTheoremApplicationSuggestion() {
+            if(!theoremApplicationBlacklist[theoremApplicationSuggestion.theorem]) {
+                theoremApplicationBlacklist[theoremApplicationSuggestion.theorem] = {};
+            }
+            theoremApplicationBlacklist[theoremApplicationSuggestion.theorem][theoremApplicationSuggestion.problem] = 1;
+            $('#flash').text('Blacklisted suggestion: '+JSON.stringify(theoremApplicationSuggestion));
+            generateTheoremApplicationSuggestion();
+            refreshPreceptListJs();
+        }
+
+        var newPreceptSuggestion;
+        function generateNewPreceptSuggestion() {
+            $("#newPreceptName").val('');
+            $("#newPreceptName").focus();
+            $("#newPreceptExamples").html('');
+            newPreceptSuggestion = suggestRandomPreceptCombination(1000);
+            function describePrecept(cur) {
+                strBuild.push('Existing precepts having <b>', cur);
+                if (precepts[cur].component1) {
+                    strBuild.push(' (', precepts[cur].component1, ' + ', precepts[cur].component2, ')');
+                }
+
+                strBuild.push('</b> as a component:<br>');
+                $.each(precepts, function (preceptName, preceptData) {
+                    if (preceptData.component1 == cur || preceptData.component2 == cur) {
+                        strBuild.push(preceptName, '<br>');
+                    }
+                });
+            }
+
+            if(newPreceptSuggestion) {
+                $("#newPrecept").html("What precept would be composed of <b>" + newPreceptSuggestion.p1 + "</b> and <b>" + newPreceptSuggestion.p2 + "</b>?");
+                var cur = newPreceptSuggestion.p1;
+                var strBuild = [];
+                describePrecept(newPreceptSuggestion.p1);
+                describePrecept(newPreceptSuggestion.p2);
+                $("#newPreceptExamples").html(strBuild.join(''));
+            } else {
+                $("#newPrecept").html("Couldn't think of any suggestions, maybe try again later.");
+            }
+        }
+
+        function applyNewPreceptSuggestion() {
+            var newPreceptName = $("#newPreceptName").val().trim();
+            if(!newPreceptName) {
+                return;
+            }
+            if(precepts[newPreceptName]) {
+                alert("A precept with that name already exists.");
+                return;
+            }
+            saveUndoSnapshot();
+            addPrecept(newPreceptName, newPreceptSuggestion.p1, newPreceptSuggestion.p2);
+            generateNewPreceptSuggestion();
+            refreshPreceptListJs();
+            refreshAllInfo();
+        }
+
+
+        function blacklistNewPreceptSuggestion() {
+            if(!newPreceptSuggestion) return;
+            saveUndoSnapshot();
+            var p1 = newPreceptSuggestion.p1;
+            var p2 = newPreceptSuggestion.p2;
+            if(!preceptComboBlacklist[p1]) {
+                preceptComboBlacklist[p1] = {};
+            }
+            preceptComboBlacklist[p1][p2] = 1;
+            $('#flash').text('Blacklisted suggestion: '+JSON.stringify(newPreceptSuggestion));
+            generateNewPreceptSuggestion();
+            refreshPreceptListJs();
+        }
+
+        var newTheoremSuggestion;
+        function generateNewTheoremSuggestion() {
+            var count = $('#newTheoremCount').val();
+            newTheoremSuggestion = suggestRandomTheoremCombination(count, 15);
+            if(newTheoremSuggestion) {
+                html = 'What if you combined ';
+                var first = true;
+                for(var idx in newTheoremSuggestion) {
+                    if(!first) html += ' + ';
+                    first = false;
+                    html += ' <b>'+newTheoremSuggestion[idx]+'</b>';
+                }
+                html += '?';
+                $('#newTheoremExamples').html(html);
+            } else {
+                html = 'No suggestions found, try again?';
+            }
+        }
+
+        var undoSnapshots = [];
+        var redoSnapshots = [];
+        function saveUndoSnapshot() {
+            undoSnapshots.push($('#logicOutput').val());
+            redoSnapshots = [];
+            if(undoSnapshots.length > 20) {
+                undoSnapshots.unshift();
+            }
+        }
+
+        function refreshPreceptListJs() {
+            $("#logicOutput").val(generatePreceptListJs());
+        }
+
+        function applyManualLogicChanges() {
+            eval($("#logicOutput").val());
+            $("#console").html('');
+            saveUndoSnapshot();
+            logic = loadLogic();
+            refreshAllInfo('skipRefresh');
+        }
+
+        function refreshAllInfo(skipRefresh) {
+            if(!skipRefresh) $("#console").html('');
+            printAllInfo();
+            refreshPreceptListJs();
+            console.log("Done.");
+            $("table").tablesorter({sortList:[[0,0]]});
+        }
+
+        $(function() {
+            logic = loadLogic();
+            refreshAllInfo();
+        });
+    </script>
+    <script src="preceptEdit.js"></script>
+    <script src="preceptList.js"></script>
+</head>
+<body>
+<a href="../design/mdwiki.html">(wiki)</a>
+    <table><tr><td>
+        <span id="console"></span>
+    </td>
+    <td>
+        <h3>preceptList.js</h3>
+        <textarea id="logicOutput" rows="30" cols="120"></textarea><br>
+        <button onclick="applyManualLogicChanges()">Apply Manual Changes</button><br/>
+        <div>
+            <h3>Suggestions</h3>
+            <div>
+                <span id="theoremApplication"><i>click New Solution for a theorem -> problem suggestion</i></span><br/>
+                <button onclick="blacklistTheoremApplicationSuggestion()">Blacklist Combo</button>
+                <button onclick="applyTheoremApplicationSuggestion()">It would be this effective:</button>
+                <input id="theoremApplicationAmount"/><br/>
+                <button onclick="generateTheoremApplicationSuggestion()">New Solution</button>
+                <div id="theoremApplicationExamples"/>
+            </div>
+            <br/><br/>
+
+            <div>
+                <span id="newPrecept"><i>click New Precept for a new precept suggestion</i></span><br/>
+                <button onclick="blacklistNewPreceptSuggestion()">Blacklist Combo</button>
+                <button onclick="applyNewPreceptSuggestion()">It would be named:</button>
+                <input id="newPreceptName"/><br/>
+                <button onclick="generateNewPreceptSuggestion()">New Precept</button>
+                <div id="newPreceptExamples"/>
+            </div>
+            <br/><br/>
+
+            <div>
+                <span id="newTheorem"><i>click New Theorem for a new theorem suggestion</i></span><br/>
+                <select id="newTheoremCount"><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>
+                <button onclick="generateNewTheoremSuggestion()">New Theorem</button>
+                <div id="newTheoremExamples"/>
+            </div>
+        </div>
+    </td></tr></table>
+</body>
+</html>
