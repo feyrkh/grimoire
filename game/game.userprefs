@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\ScreenFader.cs">
+    <Files>
+      <File FileName="Assets\ClickOrTimeout.cs" Line="15" Column="3" />
+      <File FileName="Assets\scripts\SplashScreen.cs" Line="28" Column="53" />
+      <File FileName="Assets\scripts\D.cs" Line="1" Column="1" />
+      <File FileName="Assets\scripts\FadeCoroutine.cs" Line="7" Column="34" />
+      <File FileName="Assets\ScreenFader.cs" Line="16" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
