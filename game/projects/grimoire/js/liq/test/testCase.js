@@ -1,3 +1,22 @@
+function buildTestCaseHelper(testSpecs, prefix, k) {
+    return new (liq.test.TestCase.extend(prefix + k, {},
+        {
+            runTest: function() {
+                if (testSpecs.__before) {
+                    testSpecs.__before();
+                }
+                try {
+                    testSpecs[k].bind(this)();
+                } finally {
+                    if (testSpecs.__after) {
+                        testSpecs.__after();
+                    }
+                }
+            }
+        }
+    ));
+}
+
 liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
     {
         /**
@@ -10,11 +29,8 @@ liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
             if (prefix && !prefix.endsWith('.')) prefix = prefix + '.';
             for (var k in testSpecs) {
                 if (!testSpecs.hasOwnProperty(k)) continue;
-                new (liq.test.TestCase.extend(prefix + k, {},
-                    {
-                        runTest: testSpecs[k]
-                    }
-                ));
+                if (k.startsWith('__')) continue;
+                buildTestCaseHelper(testSpecs, prefix, k);
             }
         }
     },
@@ -62,7 +78,29 @@ liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
                 msg = 'Assertion failed';
             }
             if (expected !== actual) {
-                this.fail(msg + ' - expected: ' + JSON.stringify(expected) + ' got ' + JSON.stringify(actual));
+                this.fail(msg + ' - expected: ' + JSON.stringify(expected) + ' got: ' + JSON.stringify(actual));
+            }
+        },
+
+        assertSetEquals: function(msg, expected, actual) {
+            if (typeof actual == 'undefined') {
+                actual = expected;
+                expected = msg;
+                msg = 'Assertion failed';
+            }
+            var failed = false;
+            if (expected.length != actual.length) {
+                failed = true;
+            } else {
+                for (var i = 0; i < expected.length; i++) {
+                    if (expected.indexOf(actual[i]) < 0) {
+                        failed = true;
+                        break;
+                    }
+                }
+            }
+            if (failed) {
+                this.fail(msg + ' - expected: ' + JSON.stringify(expected) + ' got: ' + JSON.stringify(actual));
             }
         },
 
@@ -73,6 +111,21 @@ liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
             }
             if (!flag) {
                 this.fail(msg + ' - expected truthy value, got ' + JSON.stringify(flag));
+            }
+        },
+
+        expectException: function(msg, fn) {
+            if (typeof msg == 'undefined') {
+                fn = msg;
+                msg = 'Assertion failed';
+            }
+            try {
+                fn();
+                throw "EXPECTED EXCEPTION";
+            } catch (e) {
+                if (e.indexOf("EXPECTED EXCEPTION") >= 0) {
+                    this.fail(msg + ' - expected an exception but didn\'t get one.');
+                }
             }
         }
     });
