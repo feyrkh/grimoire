@@ -24,10 +24,6 @@ liq.test.TestCase.buildTests('liq.logic.Precept', {
         this.assertEquals("# of precepts", 1, Object.keys(liq.logic.Precept.registry).length);
     },
 
-    mustHaveExistingParents: function() {
-        fail('not impl')
-    },
-
     nameAndDescRequired: function() {
         this.expectException("missing desc",
             function() {
@@ -70,6 +66,14 @@ liq.test.TestCase.buildTests('liq.logic.Precept', {
         this.assertSetEquals('shimmer used nowhere', [], p4.preceptUsage);
     },
 
+    mustHaveExistingParents: function() {
+        this.expectException(function() {
+            var p3 = new liq.logic.Precept({
+                name: "Light", desc: "desc",
+                p1: "Fire", p2: "Air"
+            });
+        });
+    },
 
     canNotCreateDuplicateEntries: function() {
         var p1 = new liq.logic.Precept({

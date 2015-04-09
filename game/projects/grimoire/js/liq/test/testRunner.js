@@ -18,9 +18,11 @@ liq.test.TestRunner = pc.Scene.extend('liq.test.TestRunner',
         },
 
         printFailingTests: function() {
+            var fontSize = 12;
+            var lineOffset = fontSize + 2;
             pc.device.ctx.fillStyle = '#ffffff';
-            pc.device.ctx.font = 'bold 12px Verdana';
-            pc.device.ctx.fillText('Finished ' + this.testIdx + ' of ' + this.testCases.length + ' tests, had ' + this.failingTests.length + ' failures', 10, 14);
+            pc.device.ctx.font = 'bold ' + fontSize + 'px Verdana';
+            pc.device.ctx.fillText('Finished ' + this.testIdx + ' of ' + this.testCases.length + ' tests, had ' + this.failingTests.length + ' failures', 10, lineOffset);
             if (this.activeTest) {
                 pc.device.ctx.fillText('Running test: ' + this.activeTest.Class.fullName, 10, 28);
             }
@@ -29,7 +31,11 @@ liq.test.TestRunner = pc.Scene.extend('liq.test.TestRunner',
             for (var i = 0; i < this.failingTests.length; i++) {
                 var test = this.failingTests[i];
                 pc.device.ctx.fillText(test.Class.fullName + ' ' + test.failureMsg, 10, y);
-                y += 14;
+                y += lineOffset;
+                if (test.stackTrace) {
+                    pc.device.ctx.fillText(test.stackTrace, 10, y);
+                    y += lineOffset;
+                }
             }
         },
 
@@ -66,6 +72,7 @@ liq.test.TestRunner = pc.Scene.extend('liq.test.TestRunner',
                         // All tests passed, load the next scene
                         pc.device.game.deactivateScene(this);
                         pc.device.game.activateScene(this.nextScene);
+                        liq.test.TestRunner.testCases = [];
                         return;
                     }
                     this.activeTest = this.testCases[this.testIdx];

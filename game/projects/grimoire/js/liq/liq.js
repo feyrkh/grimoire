@@ -18,5 +18,6 @@ pc.MyBase = pc.Base.extend('pc.MyBase', {},
         }
     });
 
+pc.jsLoader.add('lodash.js');
 pc.jsLoader.add('liq/test/test.js');
 pc.jsLoader.add('liq/logic/logic.js');

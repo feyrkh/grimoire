@@ -37,6 +37,7 @@ liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
     {
         finished: false,
         failureMsg: null,
+        stackTrace: null,
         longRunning: false,
 
         /**
@@ -63,6 +64,12 @@ liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
             } catch (e) {
                 this.failureMsg = 'FAIL: ' + (e.message ? e.message : JSON.stringify(e));
                 this.finished = true;
+                if (e.stack) {
+                    var stack = e.stack.split('\n');
+                    this.failureMsg += '; ' + stack[0];
+                    this.stackTrace = '    ' + stack[1];
+                }
+
             }
         },
 
@@ -77,27 +84,25 @@ liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
                 expected = msg;
                 msg = 'Assertion failed';
             }
-            if (expected !== actual) {
+            if (!_.isEqual(expected, actual)) {
                 this.fail(msg + ' - expected: ' + JSON.stringify(expected) + ' got: ' + JSON.stringify(actual));
             }
         },
-
         assertSetEquals: function(msg, expected, actual) {
+            var failed = false;
             if (typeof actual == 'undefined') {
                 actual = expected;
                 expected = msg;
                 msg = 'Assertion failed';
             }
-            var failed = false;
-            if (expected.length != actual.length) {
+            if (expected == null && actual == null) {
+                failed = false;
+            } else if (expected == null || actual == null) {
                 failed = true;
             } else {
-                for (var i = 0; i < expected.length; i++) {
-                    if (expected.indexOf(actual[i]) < 0) {
-                        failed = true;
-                        break;
-                    }
-                }
+                var sortedExpected = _.clone(expected).sort();
+                var sortedActual = _.clone(actual).sort();
+                failed = !_.isEqual(sortedExpected, sortedActual);
             }
             if (failed) {
                 this.fail(msg + ' - expected: ' + JSON.stringify(expected) + ' got: ' + JSON.stringify(actual));
@@ -105,7 +110,7 @@ liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
         },
 
         assertTrue: function(msg, flag) {
-            if (typeof msg == 'undefined') {
+            if (typeof flag == 'undefined') {
                 flag = msg;
                 msg = 'Assertion failed';
             }
@@ -115,15 +120,15 @@ liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
         },
 
         expectException: function(msg, fn) {
-            if (typeof msg == 'undefined') {
+            if (typeof fn == 'undefined') {
                 fn = msg;
                 msg = 'Assertion failed';
             }
             try {
-                fn();
+                fn.bind(this)();
                 throw "EXPECTED EXCEPTION";
             } catch (e) {
-                if (e.indexOf("EXPECTED EXCEPTION") >= 0) {
+                if (typeof(e) == 'string' && e.indexOf("EXPECTED EXCEPTION") >= 0) {
                     this.fail(msg + ' - expected an exception but didn\'t get one.');
                 }
             }
