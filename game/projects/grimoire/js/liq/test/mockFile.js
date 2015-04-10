@@ -3,6 +3,7 @@
         {
         },
         {
+            name: 'mock-file',
             data: null,
             init: function(data) {
                 this.data = data;

@@ -1,6 +1,7 @@
 (function() {
     var registry = {};
     var Precept = pc.MyBase.extend('liq.logic.Precept',
+        /** @lends liq.logic.Precept **/
         {
             registry: registry,
 
@@ -9,13 +10,18 @@
              * @returns An array of liq.logic.Precept instances, or an exception if the precepts are inconsistent
              */
             loadFile: function(dataResource) {
+                this.info('Loading ' + dataResource.name + ' into precept registry');
                 var preceptArr = JSON.parse(dataResource.data);
-                for (var precept in preceptArr) {
-                    if (!preceptArr.hasOwnProperty(precept))continue;
-                    new Precept(preceptArr[precept]);
+                for (var preceptIdx in preceptArr) {
+                    if (!preceptArr.hasOwnProperty(preceptIdx))continue;
+                    var preceptData = preceptArr[preceptIdx];
+                    this.info('Loading ' + preceptData.name + ' from ' + dataResource.name);
+                    var precept = new Precept(preceptData);
                 }
+                this.info('Finished loading ' + dataResource.name + ' into precept registry');
             }
         },
+        /** @lends liq.logic.Precept.prototype **/
         {
             name: null,
             p1: null,

@@ -18,6 +18,7 @@ function buildTestCaseHelper(testSpecs, prefix, k) {
 }
 
 liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
+    /** @lends liq.test.TestCase **/
     {
         /**
          *
@@ -34,6 +35,8 @@ liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
             }
         }
     },
+
+    /** @lends liq.test.TestCase.prototype **/
     {
         finished: false,
         failureMsg: null,
@@ -41,7 +44,8 @@ liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
         longRunning: false,
 
         /**
-         * @param longRunning If true, ends the test after a single processing step. Otherwise, tests must
+         * @constructs
+         * @param {bool} longRunning If true, ends the test after a single processing step. Otherwise, tests must
          *  set 'finished' field themselves.
          */
         init: function(longRunning) {
@@ -116,6 +120,16 @@ liq.test.TestCase = pc.Scene.extend('liq.test.TestCase',
             }
             if (!flag) {
                 this.fail(msg + ' - expected truthy value, got ' + JSON.stringify(flag));
+            }
+        },
+
+        assertFalse: function(msg, flag) {
+            if (typeof flag == 'undefined') {
+                flag = msg;
+                msg = 'Assertion failed';
+            }
+            if (flag) {
+                this.fail(msg + ' - expected false value, got ' + JSON.stringify(flag));
             }
         },
 

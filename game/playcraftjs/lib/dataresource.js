@@ -36,19 +36,19 @@ pc.DataResource = pc.Base.extend('pc.DataResource',
     /** @lends pc.DataResource.prototype */
     {
         /** Data resource that has been loaded */
-        data:null,
+        data: null,
         /** HTTP request object used to load the data */
-        request:null,
+        request: null,
         /** src URL */
-        src:null,
+        src: null,
         /** Short name for this resource */
         name: null,
         /** boolean indicating whether the resource has been loaded yet */
-        loaded:false,
+        loaded: false,
         /** current callback when the resource has been loaded */
-        onLoadCallback:null,
+        onLoadCallback: null,
         /** current callback if an error occurs whilst loading the resource */
-        onErrorCallback:null,
+        onErrorCallback: null,
 
         /**
          * Loads data from a remote (URI) resource.
@@ -57,8 +57,7 @@ pc.DataResource = pc.Base.extend('pc.DataResource',
          * @param {function} [onLoadCallback] Function to be called once the image has been loaded
          * @param {function} [onErrorCallback] Function to be called if the image fails to load
          */
-        init:function (name, src, onLoadCallback, onErrorCallback)
-        {
+        init: function(name, src, onLoadCallback, onErrorCallback) {
             this._super();
             this.src = pc.device.loader.makeUrl(src);
             this.name = name;
@@ -77,8 +76,16 @@ pc.DataResource = pc.Base.extend('pc.DataResource',
          * @param {function} [onLoadCallback] Optional function called when the resource has finished loading
          * @param {function} [onErrorCallback] Optional function called if the resource fails to load
          */
-        load:function (onLoadCallback, onErrorCallback)
-        {
+        load: function(onLoadCallback, onErrorCallback) {
+            if (this.onLoadCallback) {
+                var origLoadCallback = this.onLoadCallback;
+                var newLoadCallback = onLoadCallback;
+                var syntheticCallback = function syntheticLoadCallback(data) {
+                    origLoadCallback(data);
+                    if (newLoadCallback) newLoadCallback(data);
+                }
+                onLoadCallback = syntheticCallback;
+            }
             this.onLoadCallback = onLoadCallback;
             this.onErrorCallback = onErrorCallback;
 
@@ -89,8 +96,7 @@ pc.DataResource = pc.Base.extend('pc.DataResource',
         /**
          * Force the reloading of a resource (by marking it not loaded and calling load
          */
-        reload:function ()
-        {
+        reload: function() {
             this.loaded = false;
             this.load();
         },
@@ -99,23 +105,20 @@ pc.DataResource = pc.Base.extend('pc.DataResource',
          * Called when the resource is loaded/ready. Generally this is used internally, and you should use the
          * onLoadCallback function optionally pass to the load method or constructor
          */
-        onReadyStateChange:function()
-        {
+        onReadyStateChange: function() {
             if (this.loaded) return;
 
-            if (this.request.readyState == 4)
-            {
-                if (this.request.status == 200)
-                {
+            if (this.request.readyState == 4) {
+                if (this.request.status == 200) {
                     this.loaded = true;
 
                     this.data = this.request.responseText;
 
-                    if (this.onLoadCallback)
+                    if (this.onLoadCallback) {
+                        this.debug('Calling onLoadCallback for ' + this.name);
                         this.onLoadCallback(this);
-                } else
-                if (this.request.status == 404)
-                {
+                    }
+                } else if (this.request.status == 404) {
                     this.warn('resource ' + this.src + ' error ' + this.request.status);
                     if (this.onErrorCallback)
                         this.onErrorCallback(this);
