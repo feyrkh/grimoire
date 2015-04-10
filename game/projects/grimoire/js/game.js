@@ -5,11 +5,10 @@
 TheGame = pc.Game.extend('TheGame',
     { },
     {
-        gameScene:null,
-        menuScene:null,
+        gameScene: null,
+        menuScene: null,
 
-        onReady:function ()
-        {
+        onReady: function() {
             this._super();
 
             // disable caching when developing
@@ -18,6 +17,10 @@ TheGame = pc.Game.extend('TheGame',
 
             // no resources are loaded in this template, so this is all commented out
             // pc.device.loader.add(new pc.Image('an id', 'images/an image.png'));
+            pc.device.loader.add(new pc.DataResource('precepts.json', 'data/precepts.json',
+                function(data) {
+                    liq.logic.Precept.loadFile(data)
+                }));
 
             //if (pc.device.soundEnabled)
             //   pc.device.loader.add(new pc.Sound('fire', 'sounds/fire', ['ogg', 'mp3'], 15));
@@ -26,13 +29,11 @@ TheGame = pc.Game.extend('TheGame',
             pc.device.loader.start(this.onLoading.bind(this), this.onLoaded.bind(this));
         },
 
-        onLoading:function (percentageComplete)
-        {
+        onLoading: function(percentageComplete) {
             // draw title screen -- with loading bar
         },
 
-        onLoaded:function ()
-        {
+        onLoaded: function() {
             //this.addScene(new liq.test.TestRunner(new liq.test.MyTestSuite()));
 
             // create the game scene (notice we do it here AFTER the resources are loaded)
@@ -50,14 +51,12 @@ TheGame = pc.Game.extend('TheGame',
             this.activateScene(testRunner);
         },
 
-        activateMenu:function()
-        {
+        activateMenu: function() {
             this.deactivateScene(this.gameScene);
             this.activateScene(this.menuScene);
         },
 
-        deactivateMenu:function()
-        {
+        deactivateMenu: function() {
             this.deactivateScene(this.menuScene);
             this.activateScene(this.gameScene);
         }

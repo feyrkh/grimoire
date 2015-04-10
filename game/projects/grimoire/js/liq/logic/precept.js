@@ -9,7 +9,11 @@
              * @returns An array of liq.logic.Precept instances, or an exception if the precepts are inconsistent
              */
             loadFile: function(dataResource) {
-
+                var preceptArr = JSON.parse(dataResource.data);
+                for (var precept in preceptArr) {
+                    if (!preceptArr.hasOwnProperty(precept))continue;
+                    new Precept(preceptArr[precept]);
+                }
             }
         },
         {
@@ -34,9 +38,11 @@
                 this.p1 = settings.p1;
                 this.p2 = settings.p2;
                 if (this.p1) {
+                    this.assertNotEmpty(Precept.registry[this.p1], this.p1 + ' does not exist, must load precepts in order (while loading ' + this.name + ')');
                     Precept.registry[this.p1].preceptUsage.push(this.name);
                 }
                 if (this.p2) {
+                    this.assertNotEmpty(Precept.registry[this.p2], this.p2 + ' does not exist, must load precepts in order (while loading ' + this.name + ')');
                     Precept.registry[this.p2].preceptUsage.push(this.name);
                 }
                 this.desc = settings.desc;

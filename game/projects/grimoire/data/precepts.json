@@ -1,0 +1,16 @@
+[
+    {
+        name: 'Air',
+        desc: 'air desc'
+    },
+    {
+        name: 'Fire',
+        desc: 'fire desc'
+    },
+    {
+        name: 'Light',
+        desc: 'light desc',
+        p1: 'Air',
+        p2: 'Fire'
+    }
+]

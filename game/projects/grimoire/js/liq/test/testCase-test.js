@@ -1,4 +1,4 @@
-liq.test.TestCase.buildTests('liq.logic.Precept', {
+liq.test.TestCase.buildTests('liq.test.TestCase', {
     passingAssertEqualsOk: function() {
         this.assertEquals(1, 1);
         this.assertEquals(0, 0);
