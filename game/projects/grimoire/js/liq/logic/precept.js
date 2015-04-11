@@ -30,6 +30,7 @@
             difficulty: null,
             preceptUsage: [],
             theoremUsage: [],
+            linkNames: [],
 
             init: function(settings) {
                 this.assertNotEmpty(settings.name, 'Name required');
@@ -43,13 +44,16 @@
                 }
                 this.p1 = settings.p1;
                 this.p2 = settings.p2;
+                this.linkNames = [];
                 if (this.p1) {
                     this.assertNotEmpty(Precept.registry[this.p1], this.p1 + ' does not exist, must load precepts in order (while loading ' + this.name + ')');
                     Precept.registry[this.p1].preceptUsage.push(this.name);
+                    this.linkNames.push(this.p1);
                 }
                 if (this.p2) {
                     this.assertNotEmpty(Precept.registry[this.p2], this.p2 + ' does not exist, must load precepts in order (while loading ' + this.name + ')');
                     Precept.registry[this.p2].preceptUsage.push(this.name);
+                    this.linkNames.push(this.p2);
                 }
                 this.desc = settings.desc;
                 this.difficulty = this.calculateDifficulty();

@@ -1,16 +1,73 @@
 [
     {
-        "name": "Air",
-        "desc": "air desc"
+        "name": "Core",
+        "desc": "desc"
+    },
+    {
+        "name": "Water",
+        "desc": "desc",
+        "p1": "Core"
     },
     {
         "name": "Fire",
-        "desc": "fire desc"
+        "desc": "fire desc",
+        "p1": "Core"
     },
     {
-        "name": "Light",
-        "desc": "light desc",
-        "p1": "Air",
-        "p2": "Fire"
+        "name": "Earth",
+        "desc": "desc",
+        "p1": "Core"
+    },
+    {
+        "name": "Air",
+        "desc": "desc",
+        "p1": "Core"
+    },
+    {
+        "name": "Law",
+        "desc": "desc",
+        "p1": "Core"
+    },
+    {
+        "name": "Disorder",
+        "desc": "desc",
+        "p1": "Core"
+    },
+    {
+        "name": "Weather",
+        "p1": "Water",
+        "p2": "Air",
+        "desc": "desc"
+    },
+    {
+        "name": "Void",
+        "p1": "Disorder",
+        "p2": "Air",
+        "desc": "desc"
+    },
+    {
+        "name": "Destruction",
+        "p1": "Fire",
+        "p2": "Disorder",
+        "desc": "desc"
+    },
+    {
+        "name": "Magma",
+        "p1": "Fire",
+        "p2": "Earth",
+        "desc": "desc"
+    },
+    {
+        "name": "Crystal",
+        "p1": "Earth",
+        "p2": "Law",
+        "desc": "desc"
+    },
+    {
+        "name": "Life",
+        "p1": "Water",
+        "p2": "Law",
+        "desc": "desc"
     }
+
 ]

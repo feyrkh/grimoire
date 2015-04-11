@@ -15,25 +15,24 @@ pc.Math = pc.Base('pc.Math',
     /** @lends pc.Math */
     {
         /** Quick lookup to convert radians to degrees */
-        RADIAN_TO_DEGREE:(180 / Math.PI),
+        RADIAN_TO_DEGREE: (180 / Math.PI),
         /** Quick lookup to convert degrees to radians */
-        DEGREE_TO_RADIAN:(Math.PI / 180),
+        DEGREE_TO_RADIAN: (Math.PI / 180),
         /** Quick lookup for Math.PI */
-        PI:Math.PI,
+        PI: Math.PI,
 
         /** Quick lookup for Math.round */
-        round:Math.round,
+        round: Math.round,
         /** Quick lookup for Math.random */
-        random:Math.random,
+        random: Math.random,
         /** Quick lookup for Math.floor */
-        floor:Math.floor,
+        floor: Math.floor,
 
         /**
          * Find the square of a number
          * @param {Number} number The square of the number
          */
-        sqr:function (number)
-        {
+        sqr: function(number) {
             return number * number;
         },
 
@@ -44,8 +43,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} max the end of the range
          * @returns {Number} A random number between (and including) the range
          */
-        rand:function (min, max)
-        {
+        rand: function(min, max) {
             return pc.Math.round((pc.Math.random() * (max - min)) + min);
         },
 
@@ -55,8 +53,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} max the end of the range
          * @returns {Number} A random number between (and including) the range
          */
-        randFloat:function (min, max)
-        {
+        randFloat: function(min, max) {
             return (pc.Math.random() * (max - min)) + min;
         },
 
@@ -66,8 +63,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} by Amount to add in degrees (can be negative)
          * @return {Number} A new angle, rotated by the amount given
          */
-        rotate:function (angle, by)
-        {
+        rotate: function(angle, by) {
             var newDir = angle + by;
             while (newDir > 359)
                 newDir -= 360;
@@ -83,15 +79,12 @@ pc.Math = pc.Base('pc.Math',
          * @param {Boolean} clockwise True if the difference should be calculated in a clockwise direction
          * @return {Number} Angle difference in degrees
          */
-        angleDiff: function(angleA, angleB, clockwise)
-        {
-            if (!clockwise)
-            {
+        angleDiff: function(angleA, angleB, clockwise) {
+            if (!clockwise) {
                 var diff = angleA - angleB;
                 if (diff < 0) diff += 360;
                 return diff;
-            } else
-            {
+            } else {
                 if (angleB < angleA) // wrapping around 0/360
                     angleB += 360;
                 return angleB - angleA;
@@ -104,8 +97,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} angleB Angle clockwise is relative to
          * @return {Boolean} True if angle A is clockwise to angle B
          */
-        isClockwise:function (angleA, angleB)
-        {
+        isClockwise: function(angleA, angleB) {
             if (angleA > angleB)
                 return (Math.abs(angleA - angleB)) < (angleB + (360 - angleA));
             else
@@ -117,8 +109,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} angle Angle to test
          * @return {Boolean} true is facing to the right, otherwise false (meaning it's facing left)
          */
-        isFacingRight: function(angle)
-        {
+        isFacingRight: function(angle) {
             if (angle > 270 || angle < 90) return true;
             return false;
         },
@@ -128,8 +119,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} radians Radians
          * @return {Number} Radians from degrees
          */
-        radToDeg:function (radians)
-        {
+        radToDeg: function(radians) {
             return (radians * pc.Math.RADIAN_TO_DEGREE);
         },
 
@@ -138,8 +128,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} degrees Degrees to convert
          * @return {Number} Number of radians
          */
-        degToRad:function (degrees)
-        {
+        degToRad: function(degrees) {
             return degrees * pc.Math.DEGREE_TO_RADIAN;
         },
 
@@ -149,8 +138,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} y y component of the 2d vector
          * @return Angle in degrees
          */
-        angleFromVector:function (x, y)
-        {
+        angleFromVector: function(x, y) {
             // angle to vector
             var a = pc.Math.radToDeg(Math.atan2(y, x));
             if (a < 0) a += 360;
@@ -163,8 +151,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} angle Angle in degrees
          * @return {pc.Point} A newly acquired pc.Point with the vector.
          */
-        vectorFromAngle: function(angle)
-        {
+        vectorFromAngle: function(angle) {
             var vx = Math.cos(pc.Math.degToRad(angle));
             var vy = Math.sin(pc.Math.degToRad(angle));
             return pc.Point.create(vx, vy);
@@ -180,8 +167,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} rh height of the rectangle
          * @return {Boolean} true is the point is within the rectangle
          */
-        isPointInRect:function (x, y, rx, ry, rw, rh)
-        {
+        isPointInRect: function(x, y, rx, ry, rw, rh) {
             return x >= rx && x <= (rx + rw) &&
                 y >= ry && y <= (ry + rh);
         },
@@ -198,8 +184,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} rh height of the rectangle
          * @return {Boolean} true is the rectangle is fully within the other
          */
-        isRectInRect:function (x, y, w, h, rx, ry, rw, rh)
-        {
+        isRectInRect: function(x, y, w, h, rx, ry, rw, rh) {
             if (!pc.Math.isPointInRect(x, y, rx, ry, rw, rh)) return false;
             if (!pc.Math.isPointInRect(x + w, y, rx, ry, rw, rh)) return false;
             if (!pc.Math.isPointInRect(x, y + h, rx, ry, rw, rh)) return false;
@@ -218,8 +203,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} rh height of the rectangle
          * @return {Boolean} true if the rectangle overlaps anywhere
          */
-        isRectColliding:function (x, y, w, h, rx, ry, rw, rh)
-        {
+        isRectColliding: function(x, y, w, h, rx, ry, rw, rh) {
             return !(y + h < ry || y > ry + rh ||
                 x + w < rx || x > rx + rw);
         },
@@ -231,8 +215,7 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} highest Highest value it can be
          * @return {Number} Original value or the edge of the fence if needed
          */
-        limit:function (v, lowest, highest)
-        {
+        limit: function(v, lowest, highest) {
             if (v < lowest) return lowest;
             if (v > highest) return highest;
             return v;
@@ -246,11 +229,10 @@ pc.Math = pc.Base('pc.Math',
          * @param {Number} highest Highest value to fence
          * @return {Number} Value with inc added fenced by the lowest and highest limits
          */
-        limitAdd:function (v, inc, lowest, highest)
-        {
-            if (v+inc < lowest) return lowest;
-            if (v+inc > highest) return highest;
-            return v+inc;
+        limitAdd: function(v, inc, lowest, highest) {
+            if (v + inc < lowest) return lowest;
+            if (v + inc > highest) return highest;
+            return v + inc;
         }
     },
     {
@@ -276,8 +258,7 @@ pc.Rect = pc.Pooled('pc.Rect',
          * @param {Number} h height of the rectangle
          * @return {pc.Rect} A new rectangle (acquired from the free object pool}
          */
-        create:function (x, y, w, h)
-        {
+        create: function(x, y, w, h) {
             var newDim = this._super();
             newDim.x = x;
             newDim.y = y;
@@ -289,13 +270,13 @@ pc.Rect = pc.Pooled('pc.Rect',
     /** @lends pc.Rect.prototype */
     {
         /** x position of the top left of the rectangle */
-        x:0,
+        x: 0,
         /** y position of the top left of the rectangle */
-        y:0,
+        y: 0,
         /** width of the rectangle */
-        w:0,
+        w: 0,
         /** height of the rectangle */
-        h:0,
+        h: 0,
 
         /**
          * Checks if one rectangle is completely contained in another
@@ -309,8 +290,7 @@ pc.Rect = pc.Pooled('pc.Rect',
          * @param {Number} rh height of the rectangle
          * @return {Boolean} true is the rectangle is fully within the other
          */
-        containsRect:function (x, y, w, h, rx, ry, rw, rh)
-        {
+        containsRect: function(x, y, w, h, rx, ry, rw, rh) {
             if (!pc.Math.isPointInRect(x, y, rx, ry, rw, rh)) return false;
             if (!pc.Math.isPointInRect(x + w, y, rx, ry, rw, rh)) return false;
             if (!pc.Math.isPointInRect(x, y + h, rx, ry, rw, rh)) return false;
@@ -322,8 +302,7 @@ pc.Rect = pc.Pooled('pc.Rect',
          * @param {pc.Point} p A pc.point (or any object with a .x and .y property
          * @return {Boolean} true if the point is within the rectangle
          */
-        containsPoint:function (p)
-        {
+        containsPoint: function(p) {
             return p.x >= this.x && p.x <= (this.x + this.w) &&
                 p.y >= this.y && p.y <= (this.y + this.h);
         },
@@ -337,20 +316,18 @@ pc.Rect = pc.Pooled('pc.Rect',
          * @param {Number} dir Direction to rotate the angle to
          * @return {Boolean} true if the rectangle overlaps another
          */
-        overlaps:function (rx, ry, rw, rh, dir)
-        {
+        overlaps: function(rx, ry, rw, rh, dir) {
             var w = rw;
             var h = rh;
 
-            if (pc.valid(dir) && dir != 0)
-            {
+            if (pc.valid(dir) && dir != 0) {
                 // calculate using a rotated rectangle
                 var s = Math.sin(pc.Math.degToRad(dir));
                 var c = Math.cos(pc.Math.degToRad(dir));
-                if (s < 0) s= -s;
-                if (c < 0) c= -c;
-                w = rh*s + rw*c; // width of AABB
-                h = rh*c + rw*s; // height of AABB
+                if (s < 0) s = -s;
+                if (c < 0) c = -c;
+                w = rh * s + rw * c; // width of AABB
+                h = rh * c + rw * s; // height of AABB
             }
             return !(this.y + this.h < ry || this.y > ry + h ||
                 this.x + this.w < rx || this.x > rx + w);
@@ -359,8 +336,7 @@ pc.Rect = pc.Pooled('pc.Rect',
         /**
          * @return {String} A nice string representation of the rectangle
          */
-        toString:function ()
-        {
+        toString: function() {
             return this.x + ' x ' + this.y + ' by ' + this.w + ' x ' + this.h;
         }
 
@@ -384,8 +360,7 @@ pc.Point = pc.Pooled('pc.Point',
          * @param {Number} y y position
          * @return {pc.Point} A shiny new point
          */
-        create:function (x, y)
-        {
+        create: function(x, y) {
             var n = this._super();
             n.x = x;
             n.y = y;
@@ -395,16 +370,19 @@ pc.Point = pc.Pooled('pc.Point',
     /** @lends pc.Point.prototype */
     {
         /** x position of the point */
-        x:0,
+        x: 0,
         /** y position of the point */
-        y:0,
+        y: 0,
+
+        toString: function() {
+            return '[point ' + x + ',' + y + ']';
+        },
 
         /**
          * Makes this point match another
          * @param {pc.Point} p The other point to match
          */
-        match:function (p)
-        {
+        match: function(p) {
             this.x = p.x;
             this.y = p.y;
         },
@@ -413,8 +391,7 @@ pc.Point = pc.Pooled('pc.Point',
          * Makes this point match another
          * @param {pc.Point} p The other point to match
          */
-        set: function(p)
-        {
+        set: function(p) {
             this.match(p);
         },
 
@@ -424,8 +401,7 @@ pc.Point = pc.Pooled('pc.Point',
          * @param {Number} y y position to set
          * @return {pc.Point} This point
          */
-        setXY: function(x, y)
-        {
+        setXY: function(x, y) {
             this.x = x;
             this.y = y;
             return this;
@@ -437,8 +413,7 @@ pc.Point = pc.Pooled('pc.Point',
          * @param {Number} y Amount to add to y
          * @return {pc.Point} This point
          */
-        add: function(x, y)
-        {
+        add: function(x, y) {
             this.x += x;
             this.y += y;
             return this;
@@ -450,8 +425,7 @@ pc.Point = pc.Pooled('pc.Point',
          * @param {Number} y Amount to subtract from y
          * @return {pc.Point} This point
          */
-        subtract:function (x, y)
-        {
+        subtract: function(x, y) {
             this.x -= x;
             this.y -= y;
             return this;
@@ -462,9 +436,8 @@ pc.Point = pc.Pooled('pc.Point',
          * @param {pc.Point} p Another point
          * @return {Number} Facing direction (in degrees) from this point to another
          */
-        dirTo:function (p)
-        {
-            return Math.atan2(p.y-this.y, p.x-this.x) * 180 / Math.PI;
+        dirTo: function(p) {
+            return Math.atan2(p.y - this.y, p.x - this.x) * 180 / Math.PI;
         },
 
         /**
@@ -472,8 +445,7 @@ pc.Point = pc.Pooled('pc.Point',
          * @param {Number} dir Direction to move, in degrees
          * @param {Number} distance Distance to move
          */
-        moveInDir:function (dir, distance)
-        {
+        moveInDir: function(dir, distance) {
             this.x += distance * Math.cos(pc.Math.degToRad(dir));
             this.y += distance * Math.sin(pc.Math.degToRad(dir));
             return this;
@@ -485,8 +457,7 @@ pc.Point = pc.Pooled('pc.Point',
          * @param {pc.Point} to Ending position
          * @param {Number} distance Amount to move
          */
-        moveTowards:function (to, distance)
-        {
+        moveTowards: function(to, distance) {
             this.moveInDir(this.dirTo(to), distance);
         },
 
@@ -495,8 +466,7 @@ pc.Point = pc.Pooled('pc.Point',
          * @param {pc.Point} p Another point
          * @return {Number} Distance between this point and another
          */
-        distance:function (p)
-        {
+        distance: function(p) {
             return Math.sqrt((p.x - this.x) * (p.x - this.x) + (p.y - this.y) * (p.y - this.y));
         },
 
@@ -504,8 +474,7 @@ pc.Point = pc.Pooled('pc.Point',
          * A nice string representing this point
          * @return {String}
          */
-        toString:function ()
-        {
+        toString: function() {
             return this.x + 'x' + this.y;
         }
 
@@ -515,8 +484,7 @@ pc.Point = pc.Pooled('pc.Point',
 pc.Poly = pc.Pooled('pc.Poly',
     /** @lends pc.Poly */
     {
-        create:function (x, y, points)
-        {
+        create: function(x, y, points) {
             var n = this._super();
             n.x = x;
             n.y = y;
@@ -527,24 +495,22 @@ pc.Poly = pc.Pooled('pc.Poly',
     /** @lends pc.Poly.prototype */
     {
         /** x position of the polygon */
-        x:0,
+        x: 0,
         /** y position of the polygon */
-        y:0,
+        y: 0,
         /** array of points representing the polygon (relative to x, y) */
-        points:null,
+        points: null,
 
         _boundingRect: null,
 
-        init:function(x, y, points)
-        {
+        init: function(x, y, points) {
             this.x = x;
             this.y = y;
             this.points = points;
-            this._boundingRect = pc.Rect.create(0,0,0,0);
+            this._boundingRect = pc.Rect.create(0, 0, 0, 0);
         },
 
-        getBoundingRect:function()
-        {
+        getBoundingRect: function() {
 
         }
     });

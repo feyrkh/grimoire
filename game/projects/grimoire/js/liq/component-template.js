@@ -2,19 +2,25 @@
     liq.namespace.ComponentName = pc.MyComponent.extend('liq.namespace.ComponentName',
         /** @lends liq.namespace.ComponentName */
         {
+            /**
+             * @param settings
+             * @return {liq.namespace.ComponentName}
+             */
+            create: function(settings) {
+                var n = this._super();
+                n.config(settings);
+                return n;
+            }
         },
         /** @lends liq.namespace.ComponentName.prototype */
         {
-            /**
-             * @constructs
-             * @param settings
-             */
-            create: function(settings) {
+            config: function(settings) {
 
             },
             init: function(settings) {
                 this._super('COMPONENT_NAME');
-                this.create(settings);
+                if (pc.valid(settings))
+                    this.config(settings);
             }
         }
     );
