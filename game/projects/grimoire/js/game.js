@@ -37,12 +37,12 @@ TheGame = pc.Game.extend('TheGame',
             //this.addScene(new liq.test.TestRunner(new liq.test.MyTestSuite()));
 
             // create the game scene (notice we do it here AFTER the resources are loaded)
-            this.gameScene = new GameScene();
+            this.gameScene = new PreceptViewScene();
             this.addScene(this.gameScene, false);
 
-            // create the menu scene (but don't make it active)
-            this.menuScene = new MenuScene();
-            this.addScene(this.menuScene, false);
+//            // create the menu scene (but don't make it active)
+//            this.menuScene = new MenuScene();
+//            this.addScene(this.menuScene, false);
 
             var testRunner = new liq.test.TestRunner(this.gameScene);
 

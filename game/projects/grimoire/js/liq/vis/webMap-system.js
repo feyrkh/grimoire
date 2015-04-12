@@ -2,6 +2,22 @@
     var tmpPoint = new pc.Point(0, 0);
     var epsilon = 1;
 
+    function getConnectingLineSegment(e1, e2) {
+        var s1 = e1.getComponent('spatial');
+        var s2 = e2.getComponent('spatial');
+        var p1 = s1.getCenterPos();
+        var p2 = s2.getCenterPos();
+        tmpPoint.match(p1);
+        tmpPoint.moveTowards(p2, s1.dim.x / 2);
+        var line = [
+            {x: tmpPoint.x, y: tmpPoint.y}
+        ];
+
+        tmpPoint.moveTowards(p2, p1.distance(p2) - (s2.dim.x));
+        line.push({x: tmpPoint.x, y: tmpPoint.y});
+        return line;
+    }
+
     liq.vis.WebMapSystem = pc.systems.EntitySystem.extend('liq.vis.WebMapSystem',
         /** @lends liq.vis.WebMapSystem */
         {
@@ -43,21 +59,17 @@
                     f2.y += tmpPoint.y - p2.y;
                 }
             },
+
+
             buildDefaultRenderCallback: function(layer) {
                 return function(e1, e2) {
-                    var s1 = e1.getComponent('spatial');
-                    var s2 = e2.getComponent('spatial');
-                    var p1 = s1.getCenterPos();
-                    var p2 = s2.getCenterPos();
-                    tmpPoint.match(p1);
-//                    tmpPoint.moveTowards(p2, s1.dim.x);
+                    var line = getConnectingLineSegment(e1, e2);
 
                     var context = pc.device.ctx;
                     var pos = layer.origin;
                     context.beginPath();
-                    context.moveTo(tmpPoint.x - pos.x, tmpPoint.y - pos.y);
-                    tmpPoint.moveTowards(p2, p1.distance(p2));// - (s1.dim.x + s2.dim.x));
-                    context.lineTo(tmpPoint.x - pos.x, tmpPoint.y - pos.y);
+                    context.moveTo(line[0].x - pos.x, line[0].y - pos.y);
+                    context.lineTo(line[1].x - pos.x, line[1].y - pos.y);
 
                     // set line color
                     context.strokeStyle = '#0000ff';
@@ -153,6 +165,84 @@
                 this.itemsById.remove(entity);
             },
 
+            randomizeLayout: function(x, y) {
+                this.isStatic = false;
+                _.forEach(this.items, function(entity) {
+                    var spatial = entity.getComponent('spatial');
+                    spatial.pos.x = x + Math.random() * 30;
+                    spatial.pos.y = y + Math.random() * 30;
+                });
+                this.reachEquilibrium(500);
+            },
+
+            reachEquilibrium: function(timeoutInMs) {
+                var origRender = this.renderCallback;
+                this.renderCallback = null;
+                var prevElapsed = pc.device.elapsed;
+                var endTime = timeoutInMs + Date.now();
+                while (!this.isStatic && Date.now() < endTime) {
+                    pc.device.elapsed = 50;
+                    this.processAll();
+                }
+                pc.device.elapsed = prevElapsed;
+                var crossed = this.findCrossedLines();
+                if (this.isStatic) {
+                    this.debug('Reached equilibrium with ' + crossed + ' crossed lines');
+                } else {
+                    this.debug('No equilibrium with ' + crossed + ' crossed lines');
+                }
+                this.renderCallback = origRender;
+                return crossed;
+            },
+
+            findBestEquilibrium: function(minLoops, maxLoops) {
+                var bestCrossedCount = Infinity;
+                for (var i = 0; i < minLoops; i++) {
+                    maxLoops--;
+                    this.randomizeLayout(1000, 1000);
+                    var crossed = this.reachEquilibrium(1000);
+                    if (crossed < bestCrossedCount) {
+                        bestCrossedCount = crossed;
+                    }
+                    this.debug('Best seen equilibrium: ' + bestCrossedCount);
+                }
+                while (crossed > bestCrossedCount && maxLoops > 0) {
+                    maxLoops--;
+                    this.randomizeLayout(1000, 1000);
+                    crossed = this.reachEquilibrium(1000);
+                    this.debug('Checking equilibrium: ' + crossed);
+                }
+            },
+
+            findCrossedLines: function() {
+                var crossed = 0;
+                var lines = [];
+                var webSys = this;
+                _.forEach(this.items, function(e1) {
+                    var s1 = e1.getComponent('spatial');
+                    var myWebItem = e1.getComponent('webitem');
+
+                    for (var linkIdx in myWebItem.links) {
+                        if (!myWebItem.links.hasOwnProperty(linkIdx)) continue;
+                        var linkName = myWebItem.links[linkIdx];
+                        var linkEntity = webSys.itemsById.get(linkName);
+                        var s2 = linkEntity.getComponent('spatial');
+                        var line = getConnectingLineSegment(e1, linkEntity);
+                        lines.push({p1: line[0], p2: line[1]});
+                    }
+                });
+
+                for (var i = 0; i < lines.length; i++) {
+                    for (var j = i; j < lines.length; j++) {
+                        if (doLineSegmentsIntersect(lines[i].p1, lines[i].p2, lines[j].p1, lines[j].p2)) {
+                            crossed++;
+                        }
+                    }
+                }
+                this.debug('Total lines: ' + lines.length);
+                return crossed;
+            },
+
             processAll: function() {
                 if (!this.isStatic) {
                     this.movedInFrame = false;
@@ -169,7 +259,7 @@
                         /**
                          * @type {liq.vis.WebItem}
                          */
-                        var myWebItem = myEntity.getComponent('webitem');
+                        myWebItem = myEntity.getComponent('webitem');
                         for (var j = i + 1; j < this.items.length; j++) {
                             var otherEntity = this.items[j];
                             this.repulsionCallback(myEntity, otherEntity, myEntity.webMapForce, otherEntity.webMapForce);
@@ -202,9 +292,9 @@
                          */
                         var myWebItem = myEntity.getComponent('webitem');
 
-                        for (var linkIdx in myWebItem.links) {
-                            var linkName = myWebItem.links[linkIdx];
-                            var linkEntity = this.itemsById.get(linkName);
+                        for (linkIdx in myWebItem.links) {
+                            linkName = myWebItem.links[linkIdx];
+                            linkEntity = this.itemsById.get(linkName);
                             this.renderCallback(myEntity, linkEntity);
                         }
                     }

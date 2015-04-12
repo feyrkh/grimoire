@@ -1,7 +1,7 @@
 [
     {
         "name": "Core",
-        "desc": "desc"
+        "desc": "Origin of all"
     },
     {
         "name": "Water",
@@ -32,42 +32,6 @@
         "name": "Disorder",
         "desc": "desc",
         "p1": "Core"
-    },
-    {
-        "name": "Weather",
-        "p1": "Water",
-        "p2": "Air",
-        "desc": "desc"
-    },
-    {
-        "name": "Void",
-        "p1": "Disorder",
-        "p2": "Air",
-        "desc": "desc"
-    },
-    {
-        "name": "Destruction",
-        "p1": "Fire",
-        "p2": "Disorder",
-        "desc": "desc"
-    },
-    {
-        "name": "Magma",
-        "p1": "Fire",
-        "p2": "Earth",
-        "desc": "desc"
-    },
-    {
-        "name": "Crystal",
-        "p1": "Earth",
-        "p2": "Law",
-        "desc": "desc"
-    },
-    {
-        "name": "Life",
-        "p1": "Water",
-        "p2": "Law",
-        "desc": "desc"
     }
 
 ]

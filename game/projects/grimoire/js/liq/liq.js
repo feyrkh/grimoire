@@ -38,6 +38,7 @@ var liq = {};
 
     pc.jsLoader.add('lodash.js');
     pc.jsLoader.add('liq/test/test.js');
+    pc.jsLoader.add('liq/ui/ui.js');
     pc.jsLoader.add('liq/logic/logic.js');
     pc.jsLoader.add('liq/vis/vis.js');
 }());

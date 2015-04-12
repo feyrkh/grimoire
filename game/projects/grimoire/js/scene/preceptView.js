@@ -1,8 +1,4 @@
-/**
- * GameScene
- * A template game scene
- */
-GameScene = pc.Scene.extend('GameScene',
+PreceptViewScene = pc.Scene.extend('GameScene',
     { },
     {
         gameLayer: null,
@@ -10,8 +6,6 @@ GameScene = pc.Scene.extend('GameScene',
 
         init: function() {
             this._super();
-
-            this.boxes = [];
 
             //-----------------------------------------------------------------------------
             // game layer
@@ -28,8 +22,16 @@ GameScene = pc.Scene.extend('GameScene',
                 gravity: null
             });
             this.gameLayer.addSystem(this.webMapSystem);
+            this.gameLayer.addSystem(new liq.ui.HoverSystem(this.gameLayer));
 
             var pos = 1000;
+
+            function onHover(entity) {
+                var ctx = pc.device.ctx;
+                ctx.fillStyle = "#ff0000";
+                ctx.font = 'Arial 12pt';
+                ctx.fillText(entity.precept.desc, pc.device.input.mousePos.x, pc.device.input.mousePos.y);
+            }
 
             for (var preceptName in liq.logic.Precept.registry) {
                 /**
@@ -38,11 +40,13 @@ GameScene = pc.Scene.extend('GameScene',
                 pos += 30;
                 var precept = liq.logic.Precept.registry[preceptName];
                 var preceptEntity = pc.Entity.create(this.gameLayer);
+                preceptEntity.precept = precept;
                 var preceptSpatial = pc.components.Spatial.create({x: Math.random() * 10 + 500, y: Math.random() * 10 + 500, w: 30, h: 30});
                 preceptEntity.addComponent(preceptSpatial);
                 preceptEntity.addComponent(pc.components.Circle.create({color: '#ffffff'}));
                 preceptEntity.addComponent(pc.components.Text.create({color: '#ff0000', text: preceptName, fontHeight: 12}));
                 preceptEntity.addComponent(liq.vis.WebItem.create({id: precept.name, links: precept.linkNames, visible: true}));
+                preceptEntity.addComponent(liq.ui.Hover.create({onHover: onHover}));
                 this.cameraTarget = this.cameraTarget || preceptSpatial;
             }
             var gravMarker = pc.Entity.create(this.gameLayer);
@@ -76,13 +80,8 @@ GameScene = pc.Scene.extend('GameScene',
             if (actionName == 'randomizeLayout') {
                 this.webMapSystem.findBestEquilibrium(5, 10);
             }
-            if (pc.device.game.menuScene.active)
-                return true;
 
-            if (actionName === 'menu')
-                pc.device.game.activateMenu();
-
-            return false; // eat the event (so it wont pass through to the newly activated menuscene
+            return false; // eat the event
         },
 
         process: function() {
