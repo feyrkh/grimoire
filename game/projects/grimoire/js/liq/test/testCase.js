@@ -3,13 +3,13 @@ function buildTestCaseHelper(testSpecs, prefix, k) {
         {
             runTest: function() {
                 if (testSpecs.__before) {
-                    testSpecs.__before();
+                    testSpecs.__before.bind(this)();
                 }
                 try {
                     testSpecs[k].bind(this)();
                 } finally {
                     if (testSpecs.__after) {
-                        testSpecs.__after();
+                        testSpecs.__after.bind(this)();
                     }
                 }
             }
