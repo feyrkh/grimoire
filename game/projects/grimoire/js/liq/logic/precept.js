@@ -3,6 +3,9 @@
     var Precept = pc.MyBase.extend('liq.logic.Precept',
         /** @lends liq.logic.Precept **/
         {
+            /**
+             * @type {Object.<string,liq.logic.Precept>}
+             */
             registry: registry,
 
             /**
@@ -28,10 +31,24 @@
             p2: null,
             desc: null,
             difficulty: null,
+            /**
+             * Array of precept names this precept is a component of.
+             */
             preceptUsage: [],
+            /**
+             * Array of theorem names this precept is a component of.
+             */
             theoremUsage: [],
             linkNames: [],
 
+            /**
+             * @constructs
+             * @param settings
+             * @param {string} settings.name Name of the precept
+             * @param {string} settings.p1 Name of the first parent precept
+             * @param {string} settings.p2 Name of the second parent precept
+             * @param {string} settings.desc Flavor text for this precept
+             */
             init: function(settings) {
                 this.assertNotEmpty(settings.name, 'Name required');
                 this.assertNotEmpty(settings.desc, 'Desc required');
@@ -58,6 +75,7 @@
                 this.desc = settings.desc;
                 this.difficulty = this.calculateDifficulty();
                 Precept.registry[this.name] = this;
+                return this;
             },
 
             calculateDifficulty: function() {

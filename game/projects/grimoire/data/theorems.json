@@ -1,0 +1,28 @@
+[
+    {
+        "name": "Scientific Method",
+        "desc": "asdf",
+        "precepts": {
+            "Order": 1
+        }
+    },
+    {
+        "name": "Mysticism",
+        "desc": "asdf",
+        "precepts": {
+            "Will": 1
+        }
+    },
+    {
+        "name": "Gramarye",
+        "desc": "asdf",
+        "precepts": {
+            "Order": 1,
+            "Will": 1
+        },
+        "prereqs": {
+            "Scientific Method": -1,
+            "Mysticism": -1
+        }
+    }
+]
