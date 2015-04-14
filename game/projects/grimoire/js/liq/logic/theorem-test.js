@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var preceptRegistry;
     var theoremRegistry;
 
@@ -15,7 +15,7 @@
     }
 
     liq.test.TestCase.buildTests('liq.logic.Theorem', {
-        __before: function() {
+        __before: function () {
             preceptRegistry = liq.logic.Precept.registry;
             theoremRegistry = liq.logic.Theorem.registry;
             liq.logic.Precept.registry = {};
@@ -29,12 +29,12 @@
             liq.logic.Theorem.registry = {};
             this.assertEquals('Precept registry not set up correctly', 6, Object.keys(liq.logic.Precept.registry).length);
         },
-        __after: function() {
+        __after: function () {
             liq.logic.Precept.registry = preceptRegistry;
             liq.logic.Theorem.registry = theoremRegistry;
         },
 
-        canCreateSimpleTheorem: function() {
+        canCreateSimpleTheorem: function () {
             this.assertEquals('Fire theorem usage before new theorem', 0, liq.logic.Precept.registry.Fire.theoremUsage.length);
             var t = new liq.logic.Theorem({
                 name: 'Spark',
@@ -46,8 +46,8 @@
             this.assertEquals('Fire theorem usage after new theorem', 1, liq.logic.Precept.registry.Fire.theoremUsage.length);
         },
 
-        mustUseExistingPrecepts: function() {
-            this.expectException('invalid precept name', function() {
+        mustUseExistingPrecepts: function () {
+            this.expectException('invalid precept name', function () {
                 var t = new liq.logic.Theorem({
                     name: 'Spark',
                     precepts: {SuperFire: 1},
@@ -56,7 +56,7 @@
             });
         },
 
-        theoremGetsIndexedInRegistryOnCreation: function() {
+        theoremGetsIndexedInRegistryOnCreation: function () {
             var t = new liq.logic.Theorem({
                 name: 'Spark',
                 precepts: {Fire: 1},
@@ -66,8 +66,8 @@
             this.assertEquals('theorem indexed', t, liq.logic.Theorem.registry['Spark']);
         },
 
-        emptyPreceptsThrowsException: function() {
-            this.expectException('theorem with no precepts', function() {
+        emptyPreceptsThrowsException: function () {
+            this.expectException('theorem with no precepts', function () {
                 var t = new liq.logic.Theorem({
                     name: 'Invalid',
                     precepts: {},
@@ -76,7 +76,7 @@
             });
         },
 
-        canCreateComplexTheorem: function() {
+        canCreateComplexTheorem: function () {
             var t = new liq.logic.Theorem({
                 name: 'Spark',
                 precepts: {Fire: 3, Light: 1},
@@ -88,16 +88,16 @@
 
         },
 
-        canCreateRandomizedTheorem: function() {
+        canCreateRandomizedTheorem: function () {
             var t = new liq.logic.Theorem({
                 name: 'Spark1',
-                precepts: {Fire: '1:3', Light: '1:500'},
+                precepts: {Fire: '1:3', Light: '1:5500'},
                 desc: 'description'
             });
             var firstLightUsage = t.precepts.Light;
             var t2 = new liq.logic.Theorem({
                 name: 'Spark2',
-                precepts: {Fire: '1:3', Light: '1:500'},
+                precepts: {Fire: '1:3', Light: '1:5500'},
                 desc: 'description'
             });
             var secondLightUsage = t2.precepts.Light;
@@ -106,7 +106,7 @@
             this.assertTrue('Fire usage #2 between 1 and 3, was ' + t2.precepts.Fire, t2.precepts.Fire >= 1 && t2.precepts.Fire <= 3);
         },
 
-        preceptCountOfZeroNotIncludedInMap: function() {
+        preceptCountOfZeroNotIncludedInMap: function () {
             var t = new liq.logic.Theorem({
                 name: 'Spark',
                 precepts: {Fire: 3, Light: 0},
@@ -116,13 +116,13 @@
             this.assertEquals('Light theorem usage after new theorem', 0, liq.logic.Precept.registry.Light.theoremUsage.length);
         },
 
-        canNotCreateTheoremsWithDuplicateName: function() {
+        canNotCreateTheoremsWithDuplicateName: function () {
             new liq.logic.Theorem({
                 name: 'Spark',
                 precepts: {Fire: 3, Light: 0},
                 desc: 'description'
             });
-            this.expectException('creating duplicate theorem', function() {
+            this.expectException('creating duplicate theorem', function () {
                 new liq.logic.Theorem({
                     name: 'Spark',
                     precepts: {Fire: 3, Light: 0},
@@ -131,7 +131,7 @@
             });
         },
 
-        canCreateTheoremsWithSamePrecepts: function() {
+        canCreateTheoremsWithSamePrecepts: function () {
             new liq.logic.Theorem({
                 name: 'Spark1',
                 precepts: {Fire: 3, Light: 1},
@@ -144,7 +144,7 @@
             });
         },
 
-        canLinkToChildPrecept: function() {
+        canLinkToChildPrecept: function () {
             var parent = new liq.logic.Theorem({
                 name: 'Spark1',
                 precepts: {Fire: 3, Light: 1},
@@ -159,7 +159,7 @@
             this.assertEquals(['Spark2'], parent.children);
         },
 
-        canNotLinkToChildPreceptTwice: function() {
+        canNotLinkToChildPreceptTwice: function () {
             var parent = new liq.logic.Theorem({
                 name: 'Spark1',
                 precepts: {Fire: 3, Light: 1},
@@ -175,7 +175,7 @@
             this.assertEquals(['Spark2'], parent.children);
         },
 
-        canGenerateWebItemEntry: function() {
+        canGenerateWebItemEntry: function () {
             var t = new liq.logic.Theorem({
                 name: 'Spark1',
                 precepts: {Fire: 3, Light: 1},
@@ -189,7 +189,7 @@
             this.assertEquals('Spark1', w.id);
         },
 
-        canLoadFile: function() {
+        canLoadFile: function () {
             var fileContent = [
                 {name: 'Scientific Method', desc: 'd1', precepts: {'Order': 5}},
                 {name: 'Hypothesis', desc: 'd2', precepts: {'Order': 1, 'Light': 1}},
@@ -201,7 +201,7 @@
             this.assertEquals('Scientific Method', liq.logic.Theorem.registry['Scientific Method'].name);
         },
 
-        canCalculateAffinityFromPrecepts: function() {
+        canCalculateAffinityFromPrecepts: function () {
             var t1 = new liq.logic.Theorem({
                 name: 'Spark1',
                 precepts: {Fire: 3, Light: 1},
@@ -217,7 +217,7 @@
             this.assertEquals('affinity total', 2, aff);
         },
 
-        canCalculateComplexityFromPrecepts: function() {
+        canCalculateComplexityFromPrecepts: function () {
             var t = new liq.logic.Theorem({
                 name: 'Spark',
                 precepts: {Fire: 1, Light: 3},
@@ -226,13 +226,13 @@
             var complexity = t.getComplexity();
             this.assertEquals('complexity', 1 + 3 * 3, complexity);
         },
-        canCalculateAffinityBonusFromDirectPrerequisite: function() {
+        canCalculateAffinityBonusFromDirectPrerequisite: function () {
             this.fail('not impl');
         },
-        canIdentifyCircularPrereqs: function() {
+        canIdentifyCircularPrereqs: function () {
             this.fail('not impl');
         },
-        canGenerateLinksToFullyConnectWeb: function() {
+        canGenerateLinksToFullyConnectWeb: function () {
             this.fail('not impl');
         }
     });
