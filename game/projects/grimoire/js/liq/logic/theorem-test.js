@@ -225,15 +225,6 @@
             });
             var complexity = t.getComplexity();
             this.assertEquals('complexity', 1 + 3 * 3, complexity);
-        },
-        canCalculateAffinityBonusFromDirectPrerequisite: function () {
-            this.fail('not impl');
-        },
-        canIdentifyCircularPrereqs: function () {
-            this.fail('not impl');
-        },
-        canGenerateLinksToFullyConnectWeb: function () {
-            this.fail('not impl');
         }
     });
 })();
