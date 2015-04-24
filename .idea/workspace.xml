@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="73cd9452-69bd-400f-b7f9-c936fb618783" name="Default" comment="Documentation and the precept editor.">
-      <change type="DELETED" beforePath="C:\Users\Kevin\Desktop\grimoire\.idea\workspace.xml" afterPath="" />
+    <list default="true" id="73cd9452-69bd-400f-b7f9-c936fb618783" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
     </list>
     <ignored path="grimoire.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,11 +27,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.5016234">
       <split-first>
         <leaf>
-          <file leaf-file-name="theorem.js" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="theorem.js" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/game/projects/grimoire/js/liq/logic/theorem.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.52793837" vertical-offset="1460" max-vertical-offset="2142">
-                  <caret line="102" column="20" selection-start-line="102" selection-start-column="20" selection-end-line="102" selection-end-column="20" />
+                <state vertical-scroll-proportion="0.39691713" vertical-offset="1460" max-vertical-offset="2142">
+                  <caret line="98" column="17" selection-start-line="98" selection-start-column="17" selection-end-line="98" selection-end-column="17" />
                   <folding />
                 </state>
               </provider>
@@ -84,7 +84,7 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="theorem-test.js" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="theorem-test.js" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/game/projects/grimoire/js/liq/logic/theorem-test.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="1.0181452" vertical-offset="3337" max-vertical-offset="3995">
@@ -1286,7 +1286,7 @@
       <workItem from="1428103631215" duration="1308000" />
       <workItem from="1428112522874" duration="162747000" />
       <workItem from="1428863346910" duration="19541000" />
-      <workItem from="1429459775844" duration="1881000" />
+      <workItem from="1429459775844" duration="1931000" />
     </task>
     <task id="LOCAL-00001" summary="Ignoring IntelliJ files.">
       <created>1428103822939</created>
@@ -1296,11 +1296,15 @@
       <created>1428281558922</created>
       <updated>1428281558922</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Removing stupid file.">
+      <created>1429912368084</created>
+      <updated>1429912368084</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="185477000" />
+    <option name="totallyTimeSpent" value="185527000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1336,6 +1340,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32963988" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32871014" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1346,7 +1351,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20775624" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1395,7 +1399,8 @@
     </option>
     <MESSAGE value="Ignoring IntelliJ files." />
     <MESSAGE value="Documentation and the precept editor." />
-    <option name="LAST_COMMIT_MESSAGE" value="Documentation and the precept editor." />
+    <MESSAGE value="Removing stupid file." />
+    <option name="LAST_COMMIT_MESSAGE" value="Removing stupid file." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1775,8 +1780,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/game/projects/grimoire/js/liq/logic/theorem.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.52793837" vertical-offset="1460" max-vertical-offset="2142">
-          <caret line="102" column="20" selection-start-line="102" selection-start-column="20" selection-end-line="102" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.39691713" vertical-offset="1460" max-vertical-offset="2142">
+          <caret line="98" column="17" selection-start-line="98" selection-start-column="17" selection-end-line="98" selection-end-column="17" />
           <folding />
         </state>
       </provider>
